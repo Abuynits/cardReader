@@ -4,6 +4,7 @@
     <list default="true" id="cee92841-99b7-4a87-8d5c-04b26cf7b2a7" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Rectangle.py" beforeDir="false" afterPath="$PROJECT_DIR$/Rectangle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/image_processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/image_processing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,7 +50,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.game">
+  <component name="RunManager" selected="Python.image_processing">
     <configuration name="basic_image_classification" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="tensorflowLearning" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -118,8 +119,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.game" />
         <item itemvalue="Python.image_processing" />
+        <item itemvalue="Python.game" />
         <item itemvalue="Python.basic_image_classification" />
       </list>
     </recent_temporary>
@@ -133,7 +134,8 @@
       <option name="presentableId" value="Default" />
       <updated>1649303528032</updated>
       <workItem from="1649303529156" duration="10017000" />
-      <workItem from="1649343545006" duration="19362000" />
+      <workItem from="1649343545006" duration="21538000" />
+      <workItem from="1649430993697" duration="5853000" />
     </task>
     <servers />
   </component>
@@ -151,20 +153,9 @@
       </map>
     </option>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/game.py</url>
-          <line>36</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/tensorflowLearning$image_processing.coverage" NAME="image_processing Coverage Results" MODIFIED="1649395375322" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/tensorflowLearning$game.coverage" NAME="game Coverage Results" MODIFIED="1649401532117" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/tensorflowLearning$game.coverage" NAME="game Coverage Results" MODIFIED="1649403900089" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/tensorflowLearning$image_processing.coverage" NAME="image_processing Coverage Results" MODIFIED="1649447091269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/tensorflowLearning$basic_image_classification.coverage" NAME="basic_image_classification Coverage Results" MODIFIED="1649308821806" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

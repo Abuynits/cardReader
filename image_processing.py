@@ -41,45 +41,65 @@ def find_rectangle_contours(img, threshold_value, min_area, max_area, rectangle_
                                 cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 0), 20)
                     # print("(", x_loc, ",", y_loc, ")", " angle: ", angle)
                     rect = Rectangle(x_loc, y_loc, width, height, angle)
-                    pts = rect.get_rectangle_pts()
+                    pts = rect.get_rotated_rectangle_pts()
 
                     cv2.circle(img, pts[0], 7, (255, 0, 0), 20)
 
-                    number_pts = rect.get_number_points()
+                    number_pts = rect.get_rotated_number_points()
                     for pt in number_pts:
                         cv2.circle(img, pt, 7, (0, 255, 0), 20)
                     rectangle_list.append(rect)
     print("number of cards:", number_cards)
-    cv2.imshow('cards', img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
 
 def find_greyscale_number_array(img, rectangle_array):
-    get_extra_coverage = .25
-
-    img = cv2.imread(image_name)
     grey_scale_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     for rectangle in rectangle_array:
-        top_left_bound, top_right_bound, bottom_left_bound, bottom_right_bound = rectangle.get_number_points()
+        top_left_number_bound, top_right_number_bound, bottom_left_number_bound, bottom_right_number_bound = rectangle.get_unrotated_number_points()
 
-        start_x = top_left_bound[0] - top_left_bound[0] * get_extra_coverage
-        start_y = top_left_bound[1] - top_left_bound[1] * get_extra_coverage
-        end_x = bottom_right_bound[0] + bottom_right_bound[0] * get_extra_coverage
-        end_y = bottom_right_bound[1] + bottom_right_bound[1] * get_extra_coverage
+        width = int(rectangle.get_width_height()[0])
+        height = int(rectangle.get_width_height()[1])
 
-        for x_loc in range(start_x, end_x):
-            for y_loc in range(start_y, end_y):
-                #TODO: need to find a way to see if a point is in a polygon
-                pass
-                # now check if in the bounds:
-                #if x_loc > top_left_bound[0] && x_loc < bottom_right_bound
+        pixel_array = [[0 for i in range(width)] for j in range(height)]
 
+        array_x_loc = 0
+        # print(len(grey_scale_image))
+        # print(len(grey_scale_image[0]))
+        for y_loc in range(int(top_left_number_bound[0]), int(top_right_number_bound[0])):
+            array_y_loc = 0
+            for x_loc in range(int(top_left_number_bound[1]), int(bottom_left_number_bound[1])):
+                rotated_pt = rectangle.get_rotation((x_loc, y_loc))
+
+                # print("image array loc:", array_x_loc, array_y_loc)
+                # print("unrotated pixel array loc:", x_loc, y_loc)
+                # print("rotated pixel array loc:", rotated_pt[0], rotated_pt[1])
+                # print("value", grey_scale_image[rotated_pt[0]][rotated_pt[1]], end='\n\n')
+                pixel_array[array_x_loc][array_y_loc] = grey_scale_image[rotated_pt[0]][rotated_pt[1]]
+
+                array_y_loc += 1
+            array_x_loc += 1
+
+        #TODO: have an array of pixels around the number
+        #TODO: need to resize the array while take the average and converting it to a 28x28 pixel array
+        #TODO: then convert the array to a 1D array and give it to the rectangle object
+        pixel_array = np.resize(pixel_array, (10,10))  # resize the pixel array to 28x28
+        np_2d_array = np.array(pixel_array)
+        rectangle.greyscale_number_pixel_array = np_2d_array.flatten().tolist()
+        print(rectangle.greyscale_number_pixel_array)
+        #
+
+        # for x in range(0, height):
+        #     for y in range(0, width):
+        #         print(pixel_array[x][y], end=",")
+        #     print()
 
 
 rectangle_list = []
 img = cv2.imread(image_name)
 find_rectangle_contours(img, threshold_value, min_area, max_area, rectangle_list)
 
-find_greyscale_number_array(image_name, rectangle_list)
+find_greyscale_number_array(img, rectangle_list)
+cv2.imshow('cards', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

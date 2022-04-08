@@ -10,8 +10,18 @@ class Rectangle:
         self.h = h
         self.angle = angle
         self.check_width()
+        self.greyscale_number_pixel_array=[]
 
-    def get_rectangle_pts(self):
+    def print_rect_debug(self, top_left, top_right, bottom_right, bottom_left):
+        print("W&H: ", self.w, self.h)
+        print("center", "(", self.x, ",", self.y, ")")
+        print("(", top_left[0], ",", top_left[1], ")")
+        print("(", top_right[0], ",", top_right[1], ")")
+        print("(", bottom_left[0], ",", bottom_left[1], ")")
+        print("(", bottom_right[0], ",", bottom_right[1], ")")
+        print()
+
+    def get_rotated_rectangle_pts(self):
         top_left = self.get_rotation((-self.w / 2, -self.h / 2))
         top_left[0] += int(self.x)
         top_left[1] += int(self.y)
@@ -25,12 +35,22 @@ class Rectangle:
         bottom_right[0] += int(self.x)
         bottom_right[1] += int(self.y)
 
-       # self.print_rect_debug(top_left, top_right, bottom_right, bottom_left)
+        self.print_rect_debug(top_left, top_right, bottom_right, bottom_left)
 
         return top_left, top_right, bottom_right, bottom_left
 
-    def get_number_points(self):
-        #TODO: potentially add min scale factors as well to remove noise
+    def get_unrotated_rectangle_pts(self):
+        top_left = int(self.x - self.w / 2), int(self.y - self.h / 2)
+        top_right = int(self.x + self.w / 2), int(self.y - self.h / 2)
+        bottom_left = int(self.x - self.w / 2), int(self.y + self.h / 2)
+        bottom_right = int(self.x + self.w / 2), int(self.y + self.h / 2)
+        return top_left, top_right, bottom_right, bottom_left
+
+    def get_number_scaled_width_height(self):
+        return int(self.w * 0.35), int(self.h * 0.35)
+
+    def get_rotated_number_points(self):
+        # TODO: potentially add min scale factors as well to remove noise
         width_scale_factor = 0.35
         height_scale_factor = 0.35
         top_left_card = self.get_rotation((-self.w / 2, -self.h / 2))
@@ -39,21 +59,25 @@ class Rectangle:
         top_right_card = self.get_rotation((-(self.w / 2) * (1 - width_scale_factor), -self.h / 2))
         top_right_card[0] += int(self.x)
         top_right_card[1] += int(self.y)
-        bottom_left_card = self.get_rotation((-(self.w / 2), -(self.h / 2)*(1-height_scale_factor)))
+        bottom_left_card = self.get_rotation((-(self.w / 2), -(self.h / 2) * (1 - height_scale_factor)))
         bottom_left_card[0] += int(self.x)
         bottom_left_card[1] += int(self.y)
-        bottom_right_card = self.get_rotation((-(self.w / 2) * (1 - width_scale_factor), -(self.h / 2)*(1-height_scale_factor)))
+        bottom_right_card = self.get_rotation(
+            (-(self.w / 2) * (1 - width_scale_factor), -(self.h / 2) * (1 - height_scale_factor)))
         bottom_right_card[0] += int(self.x)
         bottom_right_card[1] += int(self.y)
-        return top_left_card,top_right_card,bottom_left_card,bottom_right_card
-    def print_rect_debug(self, top_left, top_right, bottom_right, bottom_left):
-        print("W&H: ", self.w, self.h)
-        print("center", "(", self.x, ",", self.y, ")")
-        print("(", top_left[0], ",", top_left[1], ")")
-        print("(", top_right[0], ",", top_right[1], ")")
-        print("(", bottom_left[0], ",", bottom_left[1], ")")
-        print("(", bottom_right[0], ",", bottom_right[1], ")")
-        print()
+        return top_left_card, top_right_card, bottom_left_card, bottom_right_card
+
+    def get_unrotated_number_points(self):
+        width_scale_factor = 0.35
+        height_scale_factor = 0.35
+        top_left_card = int(self.x - self.w / 2), int(self.y - self.h / 2)
+        top_right_card = int(self.x - (self.w / 2) * (1 - width_scale_factor)), int(self.y - self.h / 2)
+        bottom_left_card = int(self.x - (self.w / 2)), int(self.y - (self.h / 2) * (1 - height_scale_factor))
+        bottom_right_card = int(self.x - (self.w / 2) * (1 - width_scale_factor)), int(
+            self.y - (self.h / 2) * (1 - height_scale_factor))
+
+        return top_left_card, top_right_card, bottom_left_card, bottom_right_card
 
     def check_width(self):
         if self.w > self.h:
@@ -73,3 +97,6 @@ class Rectangle:
         new_x = point[0] * math.cos(rotation_angle) + point[1] * math.sin(rotation_angle)
         new_y = -point[0] * math.sin(rotation_angle) + point[1] * math.cos(rotation_angle)
         return [int(new_x), int(new_y)]
+
+    def get_width_height(self):
+        return self.w, self.h

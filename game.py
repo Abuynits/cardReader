@@ -1,8 +1,10 @@
 import random
 
+
 class Player:
-    def __init__(self, cards=[]):
+    def __init__(self, cards=[], player_number=0):
         cards.sort()
+        self.player_number = player_number
         self.cards = cards  # list of own cards that can be played
         self.penalties = []  # list of cards as penalties - out of game
 
@@ -15,17 +17,20 @@ class Player:
 
 def game_setup(number_players, player_array, cd):
     if 4 <= number_players <= 10:
-        total_cards = number_players * 11
+        total_cards = number_players * 10 + 4
         allCards = []
         for card in range(1, total_cards):
             allCards.append(card)
-        random.shuffle(cd)
+        random.shuffle(allCards)
 
         for i in range(number_players):
             p = Player()
-            for j in range(10 * i, 10+10 * i):
+            print(p)
+            for j in range(0, 10):
+                print(j)
                 p.cards.append(allCards[0])
-                allCards.pop(0)
+                del allCards[0:1]
+            print(p.cards)
             player_array.append(p)
         count = 0
 
@@ -46,11 +51,13 @@ def show_gameboard(card_deck):
 # test:
 player_arr = []
 rows, cols = (4, 5)
-card_deck = [[0]*cols]*rows
 
+card_deck = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+show_gameboard(card_deck)
 game_setup(5, player_arr, card_deck)
 
 show_gameboard(card_deck)
+
 for p in player_arr:
     p.show_player()
 
