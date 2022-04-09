@@ -10,7 +10,7 @@ def init_model():
     prediction_model = tf.keras.Sequential([
         tf.keras.layers.Flatten(input_shape=(28, 28)),
         # after flattened, consist of these 2 dense layers- fullyconnected neural layers.
-        tf.keras.layers.Dense(128, activation='relu'),  # has 128 nodes
+        tf.keras.layers.Dense(50, activation='relu'),  # has 128 nodes
         tf.keras.layers.Dense(10)
         # has 10 nodes - returns logits array with 10 - each node has score indicate current image
     ])
@@ -24,7 +24,7 @@ def init_model():
                              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                              metrics=['accuracy'])
 
-    prediction_model.fit(train_data, train_labels, epochs=5)
+    prediction_model.fit(train_data, train_labels, epochs=1)
 
     model_loss, model_accuracy = prediction_model.evaluate(test_data, test_labels, verbose=2)
     print('Model Accuracy:', model_accuracy)
@@ -33,8 +33,9 @@ def init_model():
 
 def predict_image(rect, prediction_model):
     img = rect.greyscale_number_pixel_array
-
     np_img = np.expand_dims(img, 0)
+    print("image shape:",np_img.shape)
+    #print(np_img)
     predictions_single = prediction_model.predict(np_img)
     print(predictions_single)
     print(np.argmax(predictions_single[0]))

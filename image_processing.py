@@ -124,16 +124,18 @@ def reshape_array(arr, dimensions, rectangle):
                 for pixel_col in range(start_col, end_col):
                     sum = sum + arr[pixel_row][pixel_col]
 
-            result = int(sum / (elements_per_row * elements_per_col))
-            rectangle.greyscale_number_pixel_array[col][row] = 255 - result
-    rectangle.scale_from_255()
+            result = 1-sum / (elements_per_row * elements_per_col)/255
+            if result>.5:
+                result=1
+            else:
+                result=0
+            rectangle.greyscale_number_pixel_array[col][row] = result
     for i in range(len(rectangle.greyscale_number_pixel_array)):
         for j in range(len(rectangle.greyscale_number_pixel_array[0])):
-            if rectangle.greyscale_number_pixel_array[i][j] > .5:
+            if rectangle.greyscale_number_pixel_array[i][j] >.5:
                 print_array[i][j] = "0"
             else:
                 print_array[i][j] = "-"
-
     for row in print_array:
         print(row)
     # now we have multiples of the desired size
