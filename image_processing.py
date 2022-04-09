@@ -89,7 +89,7 @@ def find_greyscale_number_array(img, rectangle_array):
         # TODO: then convert the array to a 1D array and give it to the rectangle object
         # TODO: THEN FOCUS ON IDENTIFYING THE ROWS AND THE CARDS IN EACH ROW!!!- FOCUS ON THE GAME ASPECT ITSELF!
         resized_pixel_array = [[]]
-        reshape_array(pixel_array, (15, 15), resized_pixel_array)  # resize the pixel array to 28x28
+        reshape_array(pixel_array, (15, 15), rectangle)  # resize the pixel array to 28x28
 
         #
         # rectangle.greyscale_number_pixel_array = np_2d_array.flatten().tolist()
@@ -102,13 +102,14 @@ def find_greyscale_number_array(img, rectangle_array):
         #     print()
 
 
-def reshape_array(arr, dimensions, newArray=[]):
+def reshape_array(arr, dimensions, rectangle):
     original_height = len(arr)
     original_width = len(arr[0])
     desired_width = dimensions[0]
     desired_height = dimensions[1]
+    print_array = [[0 for i in range(desired_height)] for j in range(desired_width)]
+    rectangle.greyscale_number_pixel_array = [[0 for i in range(desired_height)] for j in range(desired_width)]
 
-    newArray = [[0 for i in range(desired_height)] for j in range(desired_width)]
     elements_per_row = original_height // desired_height
     elements_per_col = original_width // desired_width
 
@@ -129,16 +130,16 @@ def reshape_array(arr, dimensions, newArray=[]):
                     sum = sum + arr[pixel_row][pixel_col]
 
             result = int(sum / (elements_per_row * elements_per_col))
-            newArray[col][row] = result
+            rectangle.greyscale_number_pixel_array[col][row] = result
 
-    for i in range(len(newArray)):
-        for j in range(len(newArray[0])):
-            if newArray[i][j] < 150:
-                newArray[i][j] = "0"
+    for i in range(len(rectangle.greyscale_number_pixel_array)):
+        for j in range(len(rectangle.greyscale_number_pixel_array[0])):
+            if rectangle.greyscale_number_pixel_array[i][j] < 150:
+                print_array[i][j] = "0"
             else:
-                newArray[i][j] = "-"
+                print_array[i][j] = "-"
 
-    for row in newArray:
+    for row in print_array:
         print(row)
     # now we have multiples of the desired size
 
@@ -148,6 +149,7 @@ img = cv2.imread(image_name)
 find_rectangle_contours(img, threshold_value, min_area, max_area, rectangle_list)
 
 find_greyscale_number_array(img, rectangle_list)
+
 cv2.imshow('cards', img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
