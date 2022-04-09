@@ -58,10 +58,10 @@ def find_greyscale_number_array(img, rectangle_array):
     for rectangle in rectangle_array:
         top_left_number_bound, top_right_number_bound, bottom_left_number_bound, bottom_right_number_bound = rectangle.get_unrotated_number_points()
 
-        width = int(rectangle.get_width_height()[0])
-        height = int(rectangle.get_width_height()[1])
+        number_width = int(top_right_number_bound[0] - top_left_number_bound[0])
+        number_height = int(bottom_left_number_bound[1] - top_left_number_bound[1])
 
-        pixel_array = [[0 for i in range(width)] for j in range(height)]
+        pixel_array = [[0 for i in range(number_height)] for j in range(number_width)]
 
         array_x_loc = 0
         # print(len(grey_scale_image))
@@ -69,30 +69,78 @@ def find_greyscale_number_array(img, rectangle_array):
         for y_loc in range(int(top_left_number_bound[0]), int(top_right_number_bound[0])):
             array_y_loc = 0
             for x_loc in range(int(top_left_number_bound[1]), int(bottom_left_number_bound[1])):
-                rotated_pt = rectangle.get_rotation((x_loc, y_loc))
+                rotated_pt = rectangle.get_rotation_about_point((y_loc, x_loc))
 
                 # print("image array loc:", array_x_loc, array_y_loc)
                 # print("unrotated pixel array loc:", x_loc, y_loc)
                 # print("rotated pixel array loc:", rotated_pt[0], rotated_pt[1])
                 # print("value", grey_scale_image[rotated_pt[0]][rotated_pt[1]], end='\n\n')
-                pixel_array[array_x_loc][array_y_loc] = grey_scale_image[rotated_pt[0]][rotated_pt[1]]
 
+                grey_value = grey_scale_image[rotated_pt[1]][rotated_pt[0]]
+                pixel_array[array_x_loc][array_y_loc] = grey_value
+                cv2.circle(img, (int(rotated_pt[0]), int(rotated_pt[1])), 7, (255, 0, 0), 20)
                 array_y_loc += 1
             array_x_loc += 1
+        print("-----------")
+        print(number_width, number_height)
 
-        #TODO: have an array of pixels around the number
-        #TODO: need to resize the array while take the average and converting it to a 28x28 pixel array
-        #TODO: then convert the array to a 1D array and give it to the rectangle object
-        pixel_array = np.resize(pixel_array, (10,10))  # resize the pixel array to 28x28
-        np_2d_array = np.array(pixel_array)
-        rectangle.greyscale_number_pixel_array = np_2d_array.flatten().tolist()
-        print(rectangle.greyscale_number_pixel_array)
+        # TODO: have an array of pixels around the number
+        # TODO: need to resize the array while take the average and converting it to a 28x28 pixel array
+        # TODO: then convert the array to a 1D array and give it to the rectangle object
+        # TODO: THEN FOCUS ON IDENTIFYING THE ROWS AND THE CARDS IN EACH ROW!!!- FOCUS ON THE GAME ASPECT ITSELF!
+        resized_pixel_array = [[]]
+        reshape_array(pixel_array, (15, 15), resized_pixel_array)  # resize the pixel array to 28x28
+
+        #
+        # rectangle.greyscale_number_pixel_array = np_2d_array.flatten().tolist()
+        # print(rectangle.greyscale_number_pixel_array)
         #
 
         # for x in range(0, height):
         #     for y in range(0, width):
         #         print(pixel_array[x][y], end=",")
         #     print()
+
+
+def reshape_array(arr, dimensions, newArray=[]):
+    original_height = len(arr)
+    original_width = len(arr[0])
+    desired_width = dimensions[0]
+    desired_height = dimensions[1]
+
+    newArray = [[0 for i in range(desired_height)] for j in range(desired_width)]
+    elements_per_row = original_height // desired_height
+    elements_per_col = original_width // desired_width
+
+    skip_row = original_height % desired_height
+    skip_col = original_width % desired_width
+
+    for row in range(desired_height):
+        for col in range(desired_width):
+
+            start_row = row * elements_per_row + skip_row
+            start_col = col * elements_per_col + skip_col
+            end_row = row * elements_per_row + elements_per_row + skip_row
+            end_col = col * elements_per_col + elements_per_col + skip_col
+
+            sum = 0
+            for pixel_row in range(start_row, end_row):
+                for pixel_col in range(start_col, end_col):
+                    sum = sum + arr[pixel_row][pixel_col]
+
+            result = int(sum / (elements_per_row * elements_per_col))
+            newArray[col][row] = result
+
+    for i in range(len(newArray)):
+        for j in range(len(newArray[0])):
+            if newArray[i][j] < 150:
+                newArray[i][j] = "0"
+            else:
+                newArray[i][j] = "-"
+
+    for row in newArray:
+        print(row)
+    # now we have multiples of the desired size
 
 
 rectangle_list = []
