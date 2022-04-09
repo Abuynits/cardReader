@@ -11,6 +11,7 @@ class Rectangle:
         self.angle = angle
         self.check_width()
         self.greyscale_number_pixel_array = []
+        self.card_number=-1
 
     def print_rect_debug(self, top_left, top_right, bottom_right, bottom_left):
         print("W&H: ", self.w, self.h)
@@ -20,6 +21,12 @@ class Rectangle:
         print("(", bottom_left[0], ",", bottom_left[1], ")")
         print("(", bottom_right[0], ",", bottom_right[1], ")")
         print()
+
+    def scale_from_255(self):
+        for row in range(len(self.greyscale_number_pixel_array)):
+            for col in range(len(self.greyscale_number_pixel_array[0])):
+                val = self.greyscale_number_pixel_array[row][col]
+                self.greyscale_number_pixel_array[row][col] = val / 255.0
 
     def get_rotated_rectangle_pts(self):
         top_left = self.get_origin_rotation((-self.w / 2, -self.h / 2))
@@ -76,9 +83,9 @@ class Rectangle:
         max_width = 0.65
         max_height = 0.65
 
-        top_left_card = int(self.x - self.w / 2*min_width), int(self.y - self.h / 2*min_height)
-        top_right_card = int(self.x - (self.w / 2) * max_width), int(self.y - self.h / 2*min_height)
-        bottom_left_card = int(self.x - (self.w / 2*min_width)), int(self.y - (self.h / 2) * max_height)
+        top_left_card = int(self.x - self.w / 2 * min_width), int(self.y - self.h / 2 * min_height)
+        top_right_card = int(self.x - (self.w / 2) * max_width), int(self.y - self.h / 2 * min_height)
+        bottom_left_card = int(self.x - (self.w / 2 * min_width)), int(self.y - (self.h / 2) * max_height)
         bottom_right_card = int(self.x - (self.w / 2) * max_width), int(
             self.y - (self.h / 2) * max_height)
 

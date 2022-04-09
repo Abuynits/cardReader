@@ -6,11 +6,6 @@ import cv2
 
 from Rectangle import Rectangle
 
-threshold_value = 170
-min_area = 50000
-max_area = 10000000
-image_name = "cards.JPG"
-
 
 # threshold= convert to black/white depending on what value you get
 # counters - detect lines
@@ -89,7 +84,7 @@ def find_greyscale_number_array(img, rectangle_array):
         # TODO: then convert the array to a 1D array and give it to the rectangle object
         # TODO: THEN FOCUS ON IDENTIFYING THE ROWS AND THE CARDS IN EACH ROW!!!- FOCUS ON THE GAME ASPECT ITSELF!
         resized_pixel_array = [[]]
-        reshape_array(pixel_array, (15, 15), rectangle)  # resize the pixel array to 28x28
+        reshape_array(pixel_array, (28, 28), rectangle)  # resize the pixel array to 28x28
 
         #
         # rectangle.greyscale_number_pixel_array = np_2d_array.flatten().tolist()
@@ -130,11 +125,11 @@ def reshape_array(arr, dimensions, rectangle):
                     sum = sum + arr[pixel_row][pixel_col]
 
             result = int(sum / (elements_per_row * elements_per_col))
-            rectangle.greyscale_number_pixel_array[col][row] = result
-
+            rectangle.greyscale_number_pixel_array[col][row] = 255 - result
+    rectangle.scale_from_255()
     for i in range(len(rectangle.greyscale_number_pixel_array)):
         for j in range(len(rectangle.greyscale_number_pixel_array[0])):
-            if rectangle.greyscale_number_pixel_array[i][j] < 150:
+            if rectangle.greyscale_number_pixel_array[i][j] > .5:
                 print_array[i][j] = "0"
             else:
                 print_array[i][j] = "-"
@@ -144,12 +139,9 @@ def reshape_array(arr, dimensions, rectangle):
     # now we have multiples of the desired size
 
 
-rectangle_list = []
-img = cv2.imread(image_name)
-find_rectangle_contours(img, threshold_value, min_area, max_area, rectangle_list)
-
-find_greyscale_number_array(img, rectangle_list)
-
-cv2.imshow('cards', img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+def update_rectangle_values(rectangle_list, img):
+    for rect in rectangle_list:
+        loc = (int(rect.x + 20), int(rect.y - 20))
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        img = cv2.putText(img, str(rect.card_number), loc, font,
+                          5, (255, 0, 0), 10, cv2.LINE_AA)
